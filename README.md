@@ -2,6 +2,7 @@
 TeamWork-ISNetwork is internal social network for employees of an organization. The goal of this application is to facilitate more interaction between colleagues and promote team bonding. 
 
 USER STORIES:
+
 The following are the required features:
   1. Admin can create an employee user account.
   2. Admin/Employees can sign in.
