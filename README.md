@@ -1,7 +1,7 @@
 # TeamWork-ISNetwork
 TeamWork-ISNetwork is internal social network for employees of an organization. The goal of this application is to facilitate more interaction between colleagues and promote team bonding. 
 
-USER STORIES
+USER STORIES:
 The following are the required features:
   1. Admin can create an employee user account.
   2. Admin/Employees can sign in.
@@ -18,6 +18,6 @@ The following are the required features:
   12. Employees can view a specific gif post.
 
 The following optional features are also to be implemented:
-  ● Employees can view all articles that belong to a category (tag).
-  ● Employees can flag a comment, article and/or gif as inappropriate.
-  ● Admin can delete a comment, article and/or gif flagged as inappropriate.
+  1. Employees can view all articles that belong to a category (tag).
+  2. Employees can flag a comment, article and/or gif as inappropriate.
+  3. Admin can delete a comment, article and/or gif flagged as inappropriate.
