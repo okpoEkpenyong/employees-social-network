@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const db = require('../queries');
+const db = require('../controllers/employeesController');
 
 
   // employees route
@@ -18,7 +18,7 @@ router.delete('/api/v1/employee/:eid', db.deleteEmployee) // DELETE an employee 
 // application -------------------------------------------------------------
 router.get('/', (req, res) => {
 
-    res.render('teamRoutes', {title: 'TeamWork-ISNetwork App'}); 
+    res.render('employeesRoutes', {title: 'TeamWork-ISNetwork App'}); 
 });
 
 module.exports = router;
