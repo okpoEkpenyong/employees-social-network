@@ -23,7 +23,7 @@ The following optional features are also to be implemented:
   2. Employees can flag a comment, article and/or gif as inappropriate.
   3. Admin can delete a comment, article and/or gif flagged as inappropriate.
 
-  [![Build Status](https://travis-ci.com/okpoEkpenyong/TeamWork-ISNetwork.svg?branch=master)](https://travis-ci.com/okpoEkpenyong/TeamWork-ISNetwork)
+ [![Build Status](https://travis-ci.com/okpoEkpenyong/TeamWork-ISNetwork.svg?branch=master)](https://travis-ci.com/okpoEkpenyong/TeamWork-ISNetwork)
 
   [![Coverage Status](https://coveralls.io/repos/github/okpoEkpenyong/TeamWork-ISNetwork/badge.svg?branch=master)](https://coveralls.io/github/okpoEkpenyong/TeamWork-ISNetwork?branch=master)
 
