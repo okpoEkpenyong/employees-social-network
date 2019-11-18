@@ -1,15 +1,18 @@
 const express = require('express');
 const router = express.Router();
 
-const db = require('../controllers/employeesController');
+const database = require('../controllers/employeesController');
 
 
   // employees route
-router.get('/api/v1/employee', db.getAllEmployees)   //GET all employees
-router.get('/api/v1/employee/:eid', db.getEmployeeById) // GET an employee
-router.post('/api/v1/employee', db.createEmployee)   // POST or create a new employee
-router.put('/api/v1/employee/:eid', db.updateEmployee)  // UPDATE an employee info
-router.delete('/api/v1/employee/:eid', db.deleteEmployee) // DELETE an employee info
+router.get('/api/v1/employee', database.getAllEmployees)   //GET all employees
+router.get('/api/v1/employee/:email', database.getEmployeeByEmail) // GET an employee/sign in
+router.post('/api/v1/employee', database.createEmployee)   // POST or create a new employee/signup
+router.put('/api/v1/employee/:eid', database.updateEmployee)  // UPDATE an employee info
+router.delete('/api/v1/employee/:eid', database.deleteEmployee) // DELETE an employee info
+
+router.post('/api/v1/employee/signup', database.signupEmployee);
+router.post('/api/v1/employee/login', database.loginEmployee);
 
 // post route
 
