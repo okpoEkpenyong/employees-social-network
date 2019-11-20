@@ -29,7 +29,7 @@
         })
       })
 
-    };
+   };
   
 
   //3: POST route
@@ -92,47 +92,6 @@
       }
     )
   };
-
-  const updateEmployees = (req, res) => {
-  //const id = parseInt(req.params.eid)
-  const data = {
-    eid: req.body.eid,
-    username : req.body.username,
-    firstname : req.body.firstname,
-    lastname : req.body.lastname,
-    email : req.body.email,
-    password : req.body.password,
-    gender : req.body.gender,
-    jobrole : req.body.jobrole,
-    department : req.body.department,
-    address : req.body.address,
-    emailverified : req.body.emailverified,
-    createdon : req.body.createdon,
-    lastlogin : req.body.lastlogin,
-    
-  }
-
-  pool.connect((err, client, done) => {
-    const query = `UPDATE employees SET username  = $1, firstname = $2 , lastname = $3, email = $4, password = $5, gender = $6,jobrole = $7, department = $8, address = $9, emailverified = $10, createdon = $11, lastlogin = $12 WHERE eid = $13`;
-    const values = [data.username,data.firstname, data.lastname, data.email, data.password, data.gender, data.jobrole, data.department, data.address, data.emailverified, data.createdon, data.lastlogin];
-    
-
-    client.query(query, values, (error, result) => {
-      done();
-      if (error) {
-        throw error
-      }
-      res.status(201).send({
-        status: 'Successful',
-       // message: `Employee with an Id, ${id} Modified `,
-        message: `Employee data Modified `, 
-       //data: result.rows[0],
-      });
-    });
-  });
- };
-
- 
 
   //5: DELETE route
   const deleteEmployee = (request, response) => {
