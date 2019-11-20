@@ -18,9 +18,7 @@ app.use(
   })
 );
 
-app.use('/auth', employeeroutes); //front end app wil use this..../auth/api/v1/employee
+app.use('/', employeeroutes); //front end app wil use this..../auth/api/v1/employee
 
-//app.use('/api/stuff', stuffRoutes);
-//app.use('/api/auth', userRoutes);
 
  module.exports = app;
