@@ -30,7 +30,7 @@ const security = {
 const getAllEmployees = (request, response) => {
   pool.query('SELECT * FROM employee ORDER BY eid ASC ', (error, results) => {
     if (error) {
-      return res.status(400).send({
+      return response.status(400).send({
         error: error
       });
     }

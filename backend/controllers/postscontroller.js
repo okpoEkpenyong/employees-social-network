@@ -20,18 +20,20 @@ const {Pool} = require('pg');
     }
    
     pool.connect((err, client, done) => {
-      const query = 'INSERT INTO Post(aid, title, body, imageURL, userId, author, createdon) VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *';
+      const query = 'INSERT INTO posts(aid, title, body, imageURL, userId, author, createdon) VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *';
       const values = [data.articleId, data.title, data.body, data.imageURL, data.userId, data.author, data.createdon];
       
       client.query(query, values, (error, result) => {
         done();
        // let result = result.rows[0];
-        if (error) {
-         throw error
-        }
+       if (error) {
+        return res.status(400).send({
+          error: error
+        });
+      }
         res.status(201).send({
           status: 'Successful',
-          message: `New Post inserted `,
+          message: `New Article posted `,
           data: result.rows[0],
         });
       });
@@ -77,6 +79,18 @@ const deleteGifs = (req, res) => {
  */
 const getAllPosts = (req, res) => {
 
+  pool.query('SELECT * FROM posts ORDER BY aid ASC ', (error, results) => {
+    if (error) {
+      return res.status(400).send({
+        error: error
+      });
+    }
+    res.status(200).send({
+      status: 'success',
+      message: 'All posts data retrieved',
+      data: results.rows,
+    });
+  })
 };
 
 /** 
@@ -99,8 +113,8 @@ const getGifs = (req, res) => {
     getGifs, 
     getArticle, 
     getAllPosts, 
-    commentOnGif,           // employees can comment on their colleagues' gif posts: POST/gifs/gifId/comment
-    commentOnArticle,       // employees can comment on their colleagues' articles post: POST/articles/articleId/comment
+   // commentOnGif,           // employees can comment on their colleagues' gif posts: POST/gifs/gifId/comment
+    //commentOnArticle,       // employees can comment on their colleagues' articles post: POST/articles/articleId/comment
     deleteGifs, 
     deleteArticles, 
     EditArticle,

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const database = require('../controllers/postscontroller');
+const database = require('../controllers/postsController');
 //const auth = require('../middleware/auth');
 
 
@@ -12,8 +12,8 @@ router.delete('/api/v1/article/:articleId', database.deleteArticles) // DELETE a
 router.get('/api/v1/Gifs/:gifId',   database.getGifs) // GET a gif
 router.get('/api/v1/Gifs/:artcleId',   database.getArticle) // GET an artcle
 router.delete('/api/v1/Gifs/:gifId', database.deleteGifs) // DELETE a Gif
-router.post('/api/v1/articles', database.PostArticle) // DELETE an article
-router.post('/api/v1/Gifs', database.PostGifs) // DELETE an article
+router.post('/api/v1/articles', database.PostArticle) // POST or create an article
+router.post('/api/v1/Gifs', database.PostGifs) // POST or create a Gif
 
 
 module.exports = router;
