@@ -49,7 +49,6 @@ const signupEmployee = (req, res) => {
   //const id = parseInt(req.params.eid)
   const hash = security.hashPassword(req.body.password);
   const data = {
-    username: req.body.username,
     firstname: req.body.firstname,
     lastname: req.body.lastname,
     email: req.body.email,
@@ -59,19 +58,17 @@ const signupEmployee = (req, res) => {
     department: req.body.department,
     address: req.body.address,
     createdon: req.body.createdon,
-    lastlogin: req.body.lastlogin,
   }
 
   pool.connect((err, client, done) => {
-    const query = 'INSERT INTO employee(username,firstname, lastname, email, password,gender,jobrole, department, address, createdon, lastlogin) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) RETURNING *';
-    const values = [data.username, data.firstname, data.lastname, data.email, data.password, data.gender, data.jobrole, data.department, data.address, data.createdon, data.lastlogin];
+    const query = 'INSERT INTO employee(firstname, lastname, email, password,gender,jobrole, department, address, createdon) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *';
+    const values = [data.firstname, data.lastname, data.email, data.password, data.gender, data.jobrole, data.department, data.address, data.createdon];
 
     client.query(query, values, (error, result) => {
       done();
       // let result = result.rows[0];
       if (error) {
         return res.status(400).json({
-          type: error.name,
           status: "Failure",
           error: error.detail,
           message: "Please check the error message and try again!"
@@ -79,8 +76,6 @@ const signupEmployee = (req, res) => {
       }
       //signup successful
       res.status(201).send({
-        password: req.body.password,
-        hash: hash,
         status: 'Successful',
         message: `New employee Added! `,
         data: result.rows[0],
@@ -92,10 +87,7 @@ const signupEmployee = (req, res) => {
 //3: GET route
 // login/sign-in function
 const loginEmployee = (request, response) => {
-
-  const id = parseInt(request.params.eid)
   const email = request.body.email
-  //const hash = security.hashPassword(request.body.password)
 
   pool.query('SELECT * FROM employee WHERE email = $1', [email], (error, results) => {
 
@@ -106,10 +98,8 @@ const loginEmployee = (request, response) => {
       });
     }
     const id = results.rows[0].eid
-    const hash = results.rows[0].password // hashed pass in the db
 
-    //results.rows[0].password: hashed password in db
-    bcrypt.compare(request.body.password, hash).then(
+    bcrypt.compare(request.body.password, results.rows[0].password ).then(
       (valid) => {
         if (!valid) {
           return response.status(401).json({
@@ -123,8 +113,6 @@ const loginEmployee = (request, response) => {
           { expiresIn: '24h' });
 
         response.status(200).json({
-          password: request.body.password, // in the db as hash
-          hash: hash,
           userId: id,
           token: token,
           status: 'success',
