@@ -1,3 +1,5 @@
+// this middlware will be applied to the posts and comments Routes and not the employeeRoutes
+
 const jwt = require('jsonwebtoken');
 
 module.exports = (req, res, next) => {

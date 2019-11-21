@@ -3,6 +3,7 @@ const bodyParser = require('body-parser')
 const app = express()
 const employeeroutes = require('./routes/employeesRoutes');
 const postsroutes = require('./routes/postsRoutes');
+const path = require('path');
 
 // takes care of CORS errors. This should be placed before the routes 
 app.use((req, res, next) => {
@@ -19,6 +20,7 @@ app.use(
   })
 );
 
+app.use('/', express.static(path.join(__dirname, 'gifs')));
 app.use('/', employeeroutes); //front end app wil use this..../auth/api/v1/employee
 app.use('/', postsroutes);
 
