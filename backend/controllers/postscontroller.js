@@ -12,16 +12,14 @@ const {Pool} = require('pg');
       articleId : req.body.aid,
       title : req.body.title,
       body : req.body.body,
-      imageURL : req.body.imageURL,
-      userId : req.body.userId,
       author : req.body.author,
       createdon : req.body.createdon,
           
     }
    
     pool.connect((err, client, done) => {
-      const query = 'INSERT INTO posts(aid, title, body, imageURL, author, createdon) VALUES($1,$2,$3,$4,$5,$6) RETURNING *';
-      const values = [data.articleId, data.title, data.body, data.imageURL, data.author, data.createdon];
+      const query = 'INSERT INTO posts(aid, title, body, author, createdon) VALUES($1,$2,$3,$4,$5) RETURNING *';
+      const values = [data.articleId, data.title, data.body, data.author, data.createdon];
       
       client.query(query, values, (error, result) => {
         done();
@@ -32,8 +30,8 @@ const {Pool} = require('pg');
         });
       }
         res.status(201).send({
-          status: 'Successful',
-          message: `New Article posted `,
+          status: 'success',
+          message: `Article successfully posted” `,
           data: result.rows[0],
         });
       });
@@ -47,6 +45,33 @@ const {Pool} = require('pg');
  */
 const PostGifs = (req, res) => {
 
+  const data = {
+    title : req.body.title,
+    imageURL : req.body.imageURL,
+    author : req.body.author,
+    createdon : req.body.createdon,
+        
+  }
+ 
+  pool.connect((err, client, done) => {
+    const query = 'INSERT INTO posts(title, imageURL, author, createdon) VALUES($1,$2,$3,$4) RETURNING *';
+    const values = [data.title, data.imageURL, data.author, data.createdon];
+    
+    client.query(query, values, (error, result) => {
+      done();
+     // let result = result.rows[0];
+     if (error) {
+      return res.status(400).send({
+        error: error
+      });
+    }
+      res.status(201).send({
+        status: 'success',
+        message: `Gif Image successfully posted! `,
+        data: result.rows[0],
+      });
+    });
+  });
 };
 
 /**
