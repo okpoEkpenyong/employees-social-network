@@ -2,7 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
 const employeeroutes = require('./routes/employeesRoutes');
-const postsroutes = require('./routes/employeesRoutes');
+const postsroutes = require('./routes/postsRoutes');
 
 // takes care of CORS errors. This should be placed before the routes 
 app.use((req, res, next) => {
