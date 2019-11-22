@@ -43,13 +43,16 @@ const {Pool} = require('pg');
  * 2: POST route
  * create a gif: POST/gifs
  */
+///api/v1/Gifs
 const PostGifs = (req, res) => {
 
+  const url = req.protocol + '://' + req.get('host');
+  req.body.post = JSON.parse(req.body.post);
   const data = {
-    title : req.body.title,
-    imageURL : req.body.imageURL,
-    author : req.body.author,
-    createdon : req.body.createdon,
+    title : req.body.post.title,
+    imageURL : url + '/api/v1/Gifs/' + req.file.filename,
+    author : req.body.post.author,
+    createdon : req.body.post.createdon,
         
   }
  
