@@ -110,7 +110,7 @@ const loginEmployee = (request, response) => {
         const token = jwt.sign(
           { payload: id },
           'RANDOM_TOKEN_SECRET',
-          { expiresIn: '24h' });
+          { expiresIn: '14d' });
 
         response.status(200).json({
           userId: id,
