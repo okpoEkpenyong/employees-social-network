@@ -1,18 +1,17 @@
 const multer = require('multer');
+const storage = multer.memoryStorage();
+const multerUploads = multer({ storage }).single('image');
+const Datauri  = require('datauri');
+const path = require('path');
+const dUri = new Datauri();
 
-const MIME_TYPES = {
-  'image/gif': 'gif'
-};
+//const uploader = require('./cloudinaryConfig').uploader;
+//const cloudinaryConfig = require('./cloudinaryConfig').cloudinaryConfig;
+//const dataUri = require('./middlewares/multerUploads').dataUri;
+//const multerUploads = require('./middlewares/multerUploads').multerUploads;
 
-const storage = multer.diskStorage({
-  destination: (req, file, callback) => {
-    callback(null, 'gifs');
-  },
-  filename: (req, file, callback) => {
-    const name = file.originalname.split(' ').join('_');
-    const extension = MIME_TYPES[file.mimetype];
-    callback(null, name + Date.now() + '.' + extension);
-  }
-});
 
-module.exports = multer({storage: storage}).single('image');
+
+const dataUri = req => dUri.format(path.extname(req.file.originalname).toString(), req.file.buffer);
+module.exports = { multerUploads, dataUri };
+//module.exports = multer({storage: storage}).single('image');

@@ -1,8 +1,6 @@
 const pool = require('./config');
-const {Pool} = require('pg');
- 
- 
- /** 
+
+/** 
   * 1: POST route
   * create an article: POST/articles
   */
@@ -44,13 +42,13 @@ const {Pool} = require('pg');
  * create a gif: POST/gifs
  */
 ///api/v1/Gifs
-const PostGifs = (req, res) => {
 
-  const url = req.protocol + '://' + req.get('host');
-  req.body.post = JSON.parse(req.body.post);
+const PostGifs = (req, res) => {
+  const file = req.file; 
+  console.log('req.file :', file);
   const data = {
     title : req.body.post.title,
-    imageURL : url + '/api/v1/Gifs/' + req.file.filename,
+    imageURL : req.body.imageURL,
     author : req.body.post.author,
     createdon : req.body.post.createdon,
         
