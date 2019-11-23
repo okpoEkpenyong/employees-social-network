@@ -97,8 +97,9 @@ const loginEmployee = (request, response) => {
         message: `Employee with e-mail:${email}, not found!`
       });
     }
-    const id = results.rows[0].eid
-
+    const id = results.rows[0].eid;
+    const lastname = results.rows[0].lastlogin;
+    
     bcrypt.compare(request.body.password, results.rows[0].password ).then(
       (valid) => {
         if (!valid) {
@@ -108,9 +109,10 @@ const loginEmployee = (request, response) => {
         }
 
         const token = jwt.sign(
-          { payload: id },
+          { payload: lastname },
           'RANDOM_TOKEN_SECRET',
-          { expiresIn: '14d' });
+          { expiresIn: '14d' },
+          );
 
         response.status(200).json({
           userId: id,
