@@ -6,9 +6,11 @@ module.exports = (req, res, next) => {
   try {
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
-    const eid = decodedToken.eid;
-    if (req.body.eid && req.body.eid !== eid) {
-      throw 'Invalid employee ID';
+    const Admin = decodedToken.payload;
+    //console.log('Admin: ', Admin );
+    //console.log('token: ', token );
+    if (Admin !== 'dean2') {
+      throw 'Unauthorized action. Only Admin is allowed!';
     } else {
       next();
     }
