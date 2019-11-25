@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const path = require('path');
-const database = require(path.resolve('../controllers/postscontroller'));
+const database = require('../controllers/postscontroller');
 //const multer = require('../middleware/multer-config');
 const auth = require('../middleware/auth');
 
-const uploader = require(path.resolve('../middleware/cloudinaryConfig').uploader);
-const dataUri = require(path.resolve('../middleware/multer-config').dataUri);
-const multerUploads = require(path.resolve('../middleware/multer-config').multerUploads);
+const uploader = require('../middleware/cloudinaryConfig').uploader;
+const dataUri = require('../middleware/multer-config').dataUri;
+const multerUploads = require('../middleware/multer-config').multerUploads;
 
   // posts route
 router.get('/api/v1/feed', auth, database.getAllPosts)   //GET all Posts
