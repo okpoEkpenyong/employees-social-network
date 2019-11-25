@@ -10,7 +10,7 @@ router.put('/api/v1/employee/:eid', auth, database.updateEmployee)  // UPDATE an
 router.delete('/api/v1/employee/:eid', auth, database.deleteEmployee) // DELETE an employee info
 
 router.post('/api/auth/signin', database.loginEmployee);     // POST or signin: Admin/employee
-router.post('/api/auth/create-user', database.signupEmployee)   // POST or create a new employee/signup
+router.post('/api/auth/create-user', auth, database.signupEmployee)   // POST or create a new employee/signup(Admin only)
 
 // post route
 
