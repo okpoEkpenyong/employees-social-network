@@ -1,5 +1,4 @@
 const pool = require('./config');
-const { Pool } = require('pg');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const moment = require('moment');
@@ -17,7 +16,7 @@ const security = {
     const token = jwt.sign({
       userId: id
     },
-      process.env.SECRET, { expiresIn: '7d' }
+      process.env.SECRET, { expiresIn: '14d' }
     );
     return token;
   }
@@ -26,26 +25,35 @@ const security = {
 };
 
 
-//1: GET all route
-const getAllEmployees = (request, response) => {
-  pool.query('SELECT * FROM employee ORDER BY eid ASC ', (error, results) => {
-    if (error) {
-      return response.status(400).send({
-        error: error
-      });
-    }
-    response.status(200).send({
-      status: 'success',
-      message: 'All Employees data retrieved',
-      data: results.rows,
-    });
+/**
+ * 1: GET all route
+ */
+const getAllEmployees = async (request, response,error) => {
+ try {
+  const client = await pool.connect()
+  const result = await client.query({
+    text: 'SELECT * FROM employee ORDER BY eid ASC ', 
   })
+  await client.end()
+  response.status(200).send({
+    status: 'success',
+    message: 'All Employees data retrieved',
+    data: result.rows,
+  });
+ } catch (error) {
+   response.status(400).json({
+     error: error
+   })
+ }
+ 
 }
 
 
-//2: POST route
-//signup function
-const signupEmployee = (req, res) => {
+/** 
+ *2: POST route
+ *signup function
+ */
+const signupEmployee = async (req, res) => {
   //const id = parseInt(req.params.eid)
   const hash = security.hashPassword(req.body.password);
   const data = {
@@ -59,38 +67,36 @@ const signupEmployee = (req, res) => {
     address: req.body.address,
     createdon: req.body.createdon,
   }
-
-  pool.connect((err, client, done) => {
-    const query = 'INSERT INTO employee(firstname, lastname, email, password,gender,jobrole, department, address, createdon) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *';
-    const values = [data.firstname, data.lastname, data.email, data.password, data.gender, data.jobrole, data.department, data.address, data.createdon];
-
-    client.query(query, values, (error, result) => {
-      done();
-      // let result = result.rows[0];
-      if (error) {
-        return res.status(400).json({
-          status: "Failure",
-          error: error.detail,
-          message: "Please check the error message and try again!"
-        });
-      }
-      //signup successful
-      res.status(201).send({
-        status: 'Successful',
-        message: `New employee Added! `,
-        data: result.rows[0],
-      });
+  try {
+    const client = await pool.connect()
+    const result = await client.query({
+      text: 'INSERT INTO employee(firstname, lastname, email, password,gender,jobrole, department, address, createdon) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *', 
+      values:  [data.firstname, data.lastname, data.email, data.password, data.gender, data.jobrole, data.department, data.address, data.createdon],
+    })
+    console.log('data:' , result.rows)
+    await client.end()
+    res.status(200).send({
+      status: 'success',
+      message: `New employee Added! `,
+      data: result.rows,
     });
-  });
+   } catch (error) {
+     res.status(400).json({
+       error: error.detail
+     })
+   }
 };
 
-//3: GET route
-// login/sign-in function
-const loginEmployee = (request, response) => {
-  const email = request.body.email
-
-  pool.query('SELECT * FROM employee WHERE email = $1', [email], (error, results) => {
-
+/** 
+ * 3: POST route
+ * login/sign-in function
+ */
+const loginEmployee = async (request, response) => {
+  const email =  request.body.email
+  const client = await pool.connect();
+  //callback
+  client.query('SELECT * FROM employee WHERE email = $1', [email], (error, results) => {
+    console.log('data: ', results.rows);
     if (results.rows < 1) {
       return response.status(400).json({
         status: "failure",
@@ -130,10 +136,12 @@ const loginEmployee = (request, response) => {
       );
 
   })
+
 };
 
-
-//4: PUT route
+/**
+ *  PUT route
+ */
 const updateEmployee = (request, response) => {
   const id = parseInt(request.params.eid)
   const { username, firstname, lastname, email, password, gender, jobrole, department, address, createdon, lastlogin } = request.body;
@@ -157,7 +165,9 @@ const updateEmployee = (request, response) => {
   )
 };
 
-//5: DELETE route
+/** 
+ * DELETE route
+*/
 const deleteEmployee = (request, response) => {
   const id = parseInt(request.params.eid);
 
