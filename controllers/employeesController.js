@@ -93,7 +93,7 @@ const loginEmployee = (request, response) => {
 
     if (results.rows < 1) {
       return response.status(400).json({
-        status: "Failure",
+        status: "failure",
         message: `Employee with e-mail:${email}, not found!`
       });
     }
