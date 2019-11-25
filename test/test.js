@@ -37,7 +37,7 @@ var agent = request.agent(server);
 
 describe('Sessions', function() {
 
-  it('Admin/employee should sign in', function(done) {
+  it('Admin/Employee should sign in', function(done) {
     agent.post('/api/auth/signin')
     .send({ email: 'ubong.emma2@example.com', password: 'ubongemma122' })
     .end(function(err, res) {
