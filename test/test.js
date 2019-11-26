@@ -35,6 +35,10 @@ describe('App basics', () => {
 // Using request.agent() is the key
 var agent = request.agent(server);
 
+const resolvingPromise = new Promise( (resolve) => {
+  resolve('promise resolved');
+});
+
 describe('Sessions', function() {
 
   it('Admin/Employee should sign in', function(done) {
@@ -45,6 +49,11 @@ describe('Sessions', function() {
         res.status).to.equal(200);
       done();
     });
+  })
+
+  it('assertion success', async () => {
+    const result = await resolvingPromise;
+    expect(result).to.equal('promise resolved'); 
   })
 
 
