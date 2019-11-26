@@ -36,7 +36,7 @@ describe('App basics', () => {
 var agent = request.agent(server);
 
 const resolvingPromise = new Promise( (resolve) => {
-  resolve('promise resolved');
+  resolve('promise resolved!');
 });
 
 describe('Sessions', function() {
@@ -53,7 +53,7 @@ describe('Sessions', function() {
 
   it('assertion success', async () => {
     const result = await resolvingPromise;
-    expect(result).to.equal('promise resolved'); 
+    expect(result).to.equal('promise resolved!'); 
   })
 
 

@@ -86,7 +86,7 @@ const loginEmployee = async (request, response,done) => {
     bcrypt.compare(request.body.password, results.rows[0].password ).then(
       (valid) => {
         if (!valid) {
-          return response.status(401).json({ error: 'Incorrect password!', })
+          return response.status(401).json({ error: 'Incorrect passwords!', })
         }
 
         response.status(200).json({
