@@ -71,33 +71,34 @@ const signupEmployee = async (req, res) => {
  * 3: POST route
  * login/sign-in function
  */
-const loginEmployee = async (request, response) => {
+const loginEmployee = async (request, response,done) => {
   const email =  request.body.email
-  const client = await pool.connect();
+  const client = await pool.connect()
   
   client.query('SELECT * FROM employee WHERE email = $1', [email], (error, results) => {
-    console.log('data: ', results.rows);
+  
+    console.log('data: ', results.rows)
     if (results.rows < 1) {
       return response.status(400).json({ status: "failure", message: `Employee with e-mail:${email}, not found!`
-      });
+      })
     }
     
     bcrypt.compare(request.body.password, results.rows[0].password ).then(
       (valid) => {
         if (!valid) {
-          return response.status(401).json({ error: 'Incorrect password!', });
+          return response.status(401).json({ error: 'Incorrect passwords!', })
         }
 
         response.status(200).json({
           userId: results.rows[0].eid,token: security.tokenize_(results.rows[0].lastname),
           status: 'success', message: `Employee with email: ${email}, sign-in successfully!`, data: results.rows,
         })
-      }).catch( (error) => { response.status(500).json({ error: error });
+      }).catch( (error) => { response.status(500).json({ error: error })
         }
-      );
+      )
 
   })
-
+ // await client.end()
 };
 
 /**
