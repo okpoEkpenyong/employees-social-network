@@ -12,15 +12,14 @@ const security = {
     return bcrypt.compareSync(password, hashPassword);
   },
 
-  generateToken(id) {
+  tokenize_(lastname) {
     const token = jwt.sign({
-      userId: id
+      payload: lastname
     },
       process.env.SECRET, { expiresIn: '14d' }
     );
     return token;
-  }
-
+  },
 
 };
 
@@ -28,22 +27,17 @@ const security = {
 /**
  * 1: GET all route
  */
-const getAllEmployees = async (request, response,error) => {
+const getAllEmployees = async (request, response) => {
  try {
   const client = await pool.connect()
   const result = await client.query({
     text: 'SELECT * FROM employee ORDER BY eid ASC ', 
   })
   await client.end()
-  response.status(200).send({
-    status: 'success',
-    message: 'All Employees data retrieved',
-    data: result.rows,
+  response.status(200).send({status: 'success',message: 'All Employees data retrieved,successfully!',data: result.rows,
   });
- } catch (error) {
-   response.status(400).json({
-     error: error
-   })
+ } 
+ catch (error) {response.status(400).json({ error: error})
  }
  
 }
@@ -53,37 +47,23 @@ const getAllEmployees = async (request, response,error) => {
  *2: POST route
  *signup function
  */
+
 const signupEmployee = async (req, res) => {
   //const id = parseInt(req.params.eid)
   const hash = security.hashPassword(req.body.password);
-  const data = {
-    firstname: req.body.firstname,
-    lastname: req.body.lastname,
-    email: req.body.email,
-    password: hash,
-    gender: req.body.gender,
-    jobrole: req.body.jobrole,
-    department: req.body.department,
-    address: req.body.address,
-    createdon: req.body.createdon,
-  }
+  const {firstname,lastname,email,gender,jobrole,department,address,createdon} = req.body
+
   try {
     const client = await pool.connect()
     const result = await client.query({
       text: 'INSERT INTO employee(firstname, lastname, email, password,gender,jobrole, department, address, createdon) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *', 
-      values:  [data.firstname, data.lastname, data.email, data.password, data.gender, data.jobrole, data.department, data.address, data.createdon],
+      values:  [firstname, lastname, email, hash, gender, jobrole, department, address, createdon],
     })
     console.log('data:' , result.rows)
     await client.end()
-    res.status(200).send({
-      status: 'success',
-      message: `New employee Added! `,
-      data: result.rows,
-    });
-   } catch (error) {
-     res.status(400).json({
-       error: error.detail
-     })
+    res.status(200).send({status: 'success', message: `New employee Added! `, data: result.rows, });
+   } 
+    catch (error) { res.status(400).json({error: error.detail })
    }
 };
 
@@ -94,44 +74,25 @@ const signupEmployee = async (req, res) => {
 const loginEmployee = async (request, response) => {
   const email =  request.body.email
   const client = await pool.connect();
-  //callback
+  
   client.query('SELECT * FROM employee WHERE email = $1', [email], (error, results) => {
     console.log('data: ', results.rows);
     if (results.rows < 1) {
-      return response.status(400).json({
-        status: "failure",
-        message: `Employee with e-mail:${email}, not found!`
+      return response.status(400).json({ status: "failure", message: `Employee with e-mail:${email}, not found!`
       });
     }
-    const id = results.rows[0].eid;
-    const lastname = results.rows[0].lastlogin;
     
     bcrypt.compare(request.body.password, results.rows[0].password ).then(
       (valid) => {
         if (!valid) {
-          return response.status(401).json({
-            error: 'Incorrect password!',
-          });
+          return response.status(401).json({ error: 'Incorrect password!', });
         }
 
-        const token = jwt.sign(
-          { payload: lastname },
-          'RANDOM_TOKEN_SECRET',
-          { expiresIn: '14d' },
-          );
-
         response.status(200).json({
-          userId: id,
-          token: token,
-          status: 'success',
-          message: `Employee with email: ${email}, sign-in successfully!`,
-          data: results.rows,
+          userId: results.rows[0].eid,token: security.tokenize_(results.rows[0].lastname),
+          status: 'success', message: `Employee with email: ${email}, sign-in successfully!`, data: results.rows,
         })
-      }).catch(
-        (error) => {
-          response.status(500).json({
-            error: error
-          });
+      }).catch( (error) => { response.status(500).json({ error: error });
         }
       );
 
@@ -151,10 +112,9 @@ const updateEmployee = (request, response) => {
     [username, firstname, lastname, email, password, gender,
       jobrole, department, address, createdon, lastlogin, id],
     (error, results) => {
+
       if (error) {
-        return response.status(400).json({
-          error: error.detail
-        });
+        return response.status(400).json({ error: error.detail});
       }
       response.status(200).send({
         status: 'success',
