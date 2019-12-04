@@ -9,8 +9,8 @@
   "scripts": {
     "start": "server.js",
     "dev": "nodemon --exec babel-node ./server.js",
-    "test": "set NODE_ENV=test  && nyc --require @babel/register  mocha ./test/test.js --timeout 11000 --exit",
-    "generate-lcov": "nyc report --reporter=text-lcov > lcov.info",
+    "test": "set NODE_ENV=test  && nyc --require @babel/register  mocha ./test/test.js --exit -w",
+    "generate-lcov": "nyc report --reporter=text-lcov | coveralls",
     "coveralls-coverage": "coveralls < lcov.info",
     "codeclimate-coverage": "codeclimate-test-reporter < lcov.info",
     "coverage": "nyc npm test && npm run generate-lcov && npm run coveralls-coverage && npm run codeclimate-coverage"
