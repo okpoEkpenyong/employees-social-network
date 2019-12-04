@@ -7,8 +7,9 @@
     "node": "12.11"
   },
   "scripts": {
+    "start": "server.js",
     "dev": "nodemon --exec babel-node ./server.js",
-    "test": "set NODE_ENV=test  && nyc --require @babel/register  mocha ./test/test.js --exit -w",
+    "test": "set NODE_ENV=test  && nyc --require @babel/register  mocha ./test/test.js --timeout 20000 --exit",
     "generate-lcov": "nyc report --reporter=text-lcov | coveralls",
     "coveralls-coverage": "coveralls < lcov.info",
     "codeclimate-coverage": "codeclimate-test-reporter < lcov.info",
