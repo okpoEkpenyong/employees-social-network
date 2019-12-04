@@ -2,7 +2,6 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const server = require('../server');
 const app = require('../app')
-const should = require('should');
 const request = require('supertest')
 
 chai.use(chaiHttp);
@@ -28,7 +27,6 @@ describe('App basics', () => {
   it('Should exists', () => {
     expect(app).to.be.a('function');
   })
-
 })  
 
 
