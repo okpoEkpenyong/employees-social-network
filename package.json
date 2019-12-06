@@ -1,5 +1,5 @@
 {
-  "name": "backend",
+  "name": "teamwork-isnetwork",
   "version": "1.0.0",
   "description": "Implement backend by creating API endpoints & Integrating a Database",
   "main": "server.js",
