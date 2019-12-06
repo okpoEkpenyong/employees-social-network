@@ -1,7 +1,7 @@
 {
-  "name": "backend",
+  "name": "teamwork-isnetwork",
   "version": "1.0.0",
-  "description": "Implement backend by creating API endpoints & Integrating a Database",
+  "description": "Implement Backend by Creating API Endpoints & Integrating a Database",
   "main": "server.js",
   "engines": {
     "node": "12.11"
