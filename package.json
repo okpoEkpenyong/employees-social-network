@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/okpoEkpenyong/TeamWork-ISNetwork#readme",
   "dependencies": {
+    "babel-node": "0.0.1-security",
     "babel-polyfill": "^6.26.0",
     "bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
