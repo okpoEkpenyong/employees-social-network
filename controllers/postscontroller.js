@@ -21,16 +21,10 @@ const pool = require('./config');
       
       client.query(query, values, (error, result) => {
         done();
-       // let result = result.rows[0];
+
        if (error) {
-        return res.status(400).send({
-          error: error
-        });
-      }
-        res.status(201).send({
-          status: 'success',
-          message: `Article successfully posted” `,
-          data: result.rows[0],
+        return res.status(400).send({ error: error}); }
+        res.status(201).send({status: 'success', message: `Article successfully posted” `, data: result.rows[0],
         });
       });
     });
@@ -60,16 +54,11 @@ const PostGifs = (req, res) => {
     
     client.query(query, values, (error, result) => {
       done();
-     // let result = result.rows[0];
+
      if (error) {
-      return res.status(400).send({
-        error: error
-      });
+      return res.status(400).send({error: error});
     }
-      res.status(201).send({
-        status: 'success',
-        message: `Gif Image successfully posted! `,
-        data: result.rows[0],
+      res.status(201).send({status: 'success', message: `Gif Image successfully posted! `, data: result.rows[0],
       });
     });
   });
