@@ -16,8 +16,8 @@ The following are some of the required features:
   10. An Employee can flag a comment, article and/or gif as inappropriate.
   11. Admin can delete a comment, article and/or gif flagged as inappropriate.
 
-[![Build Status](https://travis-ci.com/okpoEkpenyong/TeamWork-ISNetwork.svg?branch=master)](https://travis-ci.com/okpoEkpenyong/TeamWork-ISNetwork)
+[![Build Status](https://travis-ci.com/okpoEkpenyong/employees-social-network.svg?branch=develop)](https://travis-ci.com/okpoEkpenyong/employees-social-network)
 
-[![Maintainability](https://api.codeclimate.com/v1/badges/9cea491705982a55f50d/maintainability)](https://codeclimate.com/github/okpoEkpenyong/TeamWork-ISNetwork/maintainability)
+[![Maintainability](https://api.codeclimate.com/v1/badges/6cf9f517024925c11d4b/maintainability)](https://codeclimate.com/github/okpoEkpenyong/employees-social-network/maintainability)
 
-[![Coverage Status](https://coveralls.io/repos/github/okpoEkpenyong/TeamWork-ISNetwork/badge.svg)](https://coveralls.io/github/okpoEkpenyong/TeamWork-ISNetwork)
+[![Coverage Status](https://coveralls.io/repos/github/okpoEkpenyong/employees-social-network/badge.svg?branch=develop)](https://coveralls.io/github/okpoEkpenyong/employees-social-network?branch=develop))
