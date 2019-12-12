@@ -1,13 +1,14 @@
 {
-  "name": "teamwork-isnetwork",
+  "name": "employees-social-network",
   "version": "1.0.0",
   "description": "Implement Backend by Creating API Endpoints & Integrating a Database",
   "main": "server.js",
   "engines": {
-    "node": "12.11"
+    "node": "12.11.0",
+    "npm": "6.11.3"
   },
   "scripts": {
-    "start": "server.js",
+    "start": "node server.js",
     "dev": "nodemon --exec babel-node ./server.js",
     "test": "set NODE_ENV=test  && nyc --require @babel/register  mocha ./test/test.js --timeout 20000 --exit",
     "generate-lcov": "nyc report --reporter=text-lcov | coveralls",
@@ -17,15 +18,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/okpoEkpenyong/TeamWork-ISNetwork.git"
+    "url": "git+https://github.com/okpoEkpenyong/employees-social-network.git"
   },
   "author": "Okpo E.",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/okpoEkpenyong/TeamWork-ISNetwork/issues"
+    "url": "https://github.com/okpoEkpenyong/employees-social-network/issues"
   },
-  "homepage": "https://github.com/okpoEkpenyong/TeamWork-ISNetwork#readme",
+  "homepage": "https://github.com/okpoEkpenyong/employees-social-network#readme",
   "dependencies": {
+    "babel-node": "0.0.1-security",
     "babel-polyfill": "^6.26.0",
     "bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
@@ -62,5 +64,8 @@
     "eslint-plugin-import": "^2.18.2",
     "mocha": "^6.2.2",
     "nyc": "^14.1.1"
+  },
+  "directories": {
+    "test": "test"
   }
 }

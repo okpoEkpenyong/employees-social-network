@@ -1,7 +1,6 @@
-const pool = require('./config');
+const {pool} = require('./config');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const moment = require('moment');
 
 const security = {
   hashPassword(password) {
@@ -49,7 +48,7 @@ const getAllEmployees = async (request, response) => {
  */
 
 const signupEmployee = async (req, res) => {
-  //const id = parseInt(req.params.eid)
+  
   const hash = security.hashPassword(req.body.password);
   const {firstname,lastname,email,gender,jobrole,department,address,createdon} = req.body
 
