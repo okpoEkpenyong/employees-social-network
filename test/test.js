@@ -33,8 +33,8 @@ describe('App basics', () => {
 
 describe('Login Sessions', () => {
   it('Authenticated Admin/Employee should sign in', async () => {
-  const res = await agent.post('/api/auth/signin')
+  const response = await request(app).post('/api/auth/signin')
     .send({ email: 'ubong.emma2@example.com', password: 'ubongemma122' });
-      expect(res.status).to.equal(200);
+      expect(response.status).to.equal(200);
   });
 });
