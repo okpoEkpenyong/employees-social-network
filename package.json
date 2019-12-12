@@ -1,5 +1,5 @@
 {
-  "name": "teamwork-isnetwork",
+  "name": "employees-social-network",
   "version": "1.0.0",
   "description": "Implement Backend by Creating API Endpoints & Integrating a Database",
   "main": "server.js",
@@ -17,15 +17,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/okpoEkpenyong/TeamWork-ISNetwork.git"
+    "url":"https://github.com/okpoEkpenyong/employees-social-network.git"
   },
   "author": "Okpo E.",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/okpoEkpenyong/TeamWork-ISNetwork/issues"
+    "url": "https://github.com/okpoEkpenyong/employees-social-network/issues"
   },
-  "homepage": "https://github.com/okpoEkpenyong/TeamWork-ISNetwork#readme",
+  "homepage": "https://github.com/okpoEkpenyong/employees-social-network#readme",
   "dependencies": {
+    "babel-node": "0.0.1-security",
     "babel-polyfill": "^6.26.0",
     "bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
