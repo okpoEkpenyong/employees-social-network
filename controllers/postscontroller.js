@@ -1,67 +1,50 @@
-const pool = require('./config');
+const { pool } = require('./config');
 
 /** 
   * 1: POST route
   * create an article: POST/articles
+  * const {artcleId,title,body,author,createdon 
   */
- const PostArticle = (req, res) => {
-   
-    const data = {
-      articleId : req.body.aid,
-      title : req.body.title,
-      body : req.body.body,
-      author : req.body.author,
-      createdon : req.body.createdon,
-          
-    }
-   
-    pool.connect((err, client, done) => {
-      const query = 'INSERT INTO posts(aid, title, body, author, createdon) VALUES($1,$2,$3,$4,$5) RETURNING *';
-      const values = [data.articleId, data.title, data.body, data.author, data.createdon];
-      
-      client.query(query, values, (error, result) => {
-        done();
 
-       if (error) {
-        return res.status(400).send({ error: error}); }
-        res.status(201).send({status: 'success', message: `Article successfully posted” `, data: result.rows[0],
-        });
-      });
-    });
-   };
+const PostArticle = async (req, res) => {
+  const { articleId, title, body, author, createdon } = req.body
+
+  try {
+    const client = await pool.connect()
+    const result = await client.query({
+      postArticleQuery: 'INSERT INTO posts(aid, title, body, author, createdon) VALUES($1,$2,$3,$4,$5) RETURNING *',
+      postArticleValues: [articleId, title, body, author, createdon]
+    })
+    await client.end()
+    res.status(201).send({ status: 'success', message: `Article successfully posted! `, data: result.rows, });
+  } catch (error) {
+    res.status(400).json({ error: error.detail })
+
+  }
+}
+
 
 
 /**
  * 2: POST route
  * create a gif: POST/gifs
  */
-///api/v1/Gifs
 
-const PostGifs = (req, res) => {
-  const file = req.file; 
-  console.log('req.file :', file);
-  const data = {
-    title : req.body.post.title,
-    imageURL : req.body.imageURL,
-    author : req.body.post.author,
-    createdon : req.body.post.createdon,
-        
-  }
+const PostGifs = async (req, res) => {
+  const { title, imageURL, author, createdon } = req.body
+  try {
+    const client = await pool.connect()
+    const result = await client.query({
+      PostGifsQuery: 'INSERT INTO posts(title, imageURL, author, createdon) VALUES($1,$2,$3,$4) RETURNING *',
+      PostGifsValues: [title, imageURL, author, createdon]
+    })
+    await client.end()
+    res.status(201).send({status:success,message: `Gif Image successfully posted! `, data: result.rows,})
  
-  pool.connect((err, client, done) => {
-    const query = 'INSERT INTO posts(title, imageURL, author, createdon) VALUES($1,$2,$3,$4) RETURNING *';
-    const values = [data.title, data.imageURL, data.author, data.createdon];
-    
-    client.query(query, values, (error, result) => {
-      done();
+  } catch (err) { res.status(400).json({error:err.detail})
 
-     if (error) {
-      return res.status(400).send({error: error});
-    }
-      res.status(201).send({status: 'success', message: `Gif Image successfully posted! `, data: result.rows[0],
-      });
-    });
-  });
+  };
+
 };
 
 /**
@@ -124,16 +107,16 @@ const getGifs = (req, res) => {
 
 };
 
-   module.exports = {
-    getGifs, 
-    getArticle, 
-    getAllPosts, 
-   // commentOnGif,           // employees can comment on their colleagues' gif posts: POST/gifs/gifId/comment
-    //commentOnArticle,       // employees can comment on their colleagues' articles post: POST/articles/articleId/comment
-    deleteGifs, 
-    deleteArticles, 
-    EditArticle,
-    PostGifs, 
-    PostArticle 
-    
-  };
+module.exports = {
+  getGifs,
+  getArticle,
+  getAllPosts,
+  // commentOnGif,           // employees can comment on their colleagues' gif posts: POST/gifs/gifId/comment
+  //commentOnArticle,       // employees can comment on their colleagues' articles post: POST/articles/articleId/comment
+  deleteGifs,
+  deleteArticles,
+  EditArticle,
+  PostGifs,
+  PostArticle
+
+};
