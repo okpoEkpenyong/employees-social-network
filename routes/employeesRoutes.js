@@ -16,8 +16,8 @@ router.post('/api/auth/create-user', auth, database.signupEmployee)   // POST or
 
 
 router.get('/', (req, res) => {
-    //res.send('<h4> Welcome to Employees-social-network Application!</h4>'); 
-    res.send(JSON.stringify({Hello: 'My Employees World!'}))
+    res.send('<h4> Welcome to Employees-social-network Application!</h4>'); 
+    //res.send(JSON.stringify({Hello: 'My Employees World!'}))
 });
 
 
