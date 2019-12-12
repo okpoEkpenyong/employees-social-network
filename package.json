@@ -4,7 +4,8 @@
   "description": "Implement Backend by Creating API Endpoints & Integrating a Database",
   "main": "server.js",
   "engines": {
-    "node": "12.11"
+    "node": "12.11.0",
+    "npm": "6.11.3"
   },
   "scripts": {
     "start": "node server.js",
