@@ -39,16 +39,13 @@ describe('Login Sessions', () => {
       expect(result).to.equal('promise resolved');
     });
 
-    it('Authenticated Admin/Employee should sign in', async (req, res , next) => {
-     try {
-       res = await chai.request(server)
-      .post('/api/auth/signin') 
-      .send({ email: 'ubong.emma2@example.com', password: 'ubongemma122' });
-      expect(res.status).to.equal(200);
-     } catch (error) { 
-       next(error);
-     }   
-   });
+    it('Authenticated Admin/Employee should sign in', async () =>{
+      const result = await chai.request(server)
+         .post('/api/auth/signin') 
+         .send({ email: 'ubong.emma2@example.com', password: 'ubongemma122' });
+         expect(result.status).to.equal(200);   
+
+    });
 
 });
 
