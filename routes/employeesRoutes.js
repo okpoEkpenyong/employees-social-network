@@ -14,12 +14,12 @@ router.post('/api/auth/create-user', auth, database.signupEmployee)   // POST or
 
 // post route
 
-// comments route
 
-// application -------------------------------------------------------------
 router.get('/', (req, res) => {
-
-    res.render('employeesRoutes', {title: 'TeamWork-ISNetwork App'}); 
+    res.send('<h4> Welcome to Employees-social-network Application!</h4>'); 
+    //res.send(JSON.stringify({Hello: 'My Employees World!'}))
 });
+
+
 
 module.exports = router;
