@@ -26,7 +26,7 @@ const security = {
 /**
  * 1: GET all route
  */
-const getAllEmployees = async (request, response) => {
+const getAllEmployees = async (request, response, next) => {
  try {
   const client = await pool.connect()
   const result = await client.query({
@@ -37,6 +37,7 @@ const getAllEmployees = async (request, response) => {
   });
  } 
  catch (error) {response.status(400).json({ error: error})
+ next(error);
  }
  
 }
