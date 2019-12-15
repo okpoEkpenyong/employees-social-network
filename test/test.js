@@ -38,14 +38,22 @@ describe('Login Sessions', () => {
       const result = await resolvingPromise;
       expect(result).to.equal('promise resolved');
     });
-
-    it('Authenticated Admin/Employee should sign in', async () =>{
-      const result = await chai.request(server)
-         .post('/api/auth/signin') 
-         .send({ email: 'ubong.emma2@example.com', password: 'ubongemma122' });
-         expect(result.status).to.equal(200);   
-
-    });
+    it('should signin non-admin user successfully', (done) => {
+      chai
+          .request(app)
+          .post('/api/auth/signin')
+          .send({
+            "email": "mayojames@gmail.com",
+            "password": "mayo"
+          })
+          .end((err, res) => {
+              expect(res.status).to.be.equal(200);
+              expect(res.body.status).to.equal('success');
+              expect(res.body).to.have.property('status');
+              expect(res.body).to.have.property('data');
+              done();
+          });
+  });
 
 });
 
