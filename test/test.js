@@ -39,7 +39,7 @@ describe('Login Sessions', () => {
 
   it('should sign in Admin successfully', (done) => {
     chai
-      .request(app)
+      .request(server)
       .post('/api/auth/signin')
       .send({
         "email": "jamesd2.dean@example.com", "password": "jamesdean2"
@@ -55,7 +55,7 @@ describe('Login Sessions', () => {
   });
   it('should signin non-Admin employees successfully', (done) => {
     chai
-      .request(app)
+      .request(server)
       .post('/api/auth/signin')
       .send({
         "email": "mayojames@gmail.com", "password": "mayo"
@@ -70,7 +70,7 @@ describe('Login Sessions', () => {
 
   it('should return error 401 for invalid password ', (done) => {
     chai
-      .request(app)
+      .request(server)
       .post('/api/auth/signin')
       .send({
         "email": "mayojames@gmail.com", "password": "mayo4"
@@ -83,7 +83,7 @@ describe('Login Sessions', () => {
 
   it('should return error 400 for invalid email ', (done) => {
     chai
-      .request(app)
+      .request(server)
       .post('/api/auth/signin')
       .send({ "email": "mayojamesE@gmail.com", "password": "mayo"
       })
@@ -106,7 +106,7 @@ describe('Login Sessions', () => {
     const createdon = "2014-04-02";
 
     chai
-      .request(app)
+      .request(server)
       .post('/api/auth/create-user')
       .send({
         firstname, lastname, email, password, gender, jobrole, department, address, createdon
