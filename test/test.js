@@ -7,21 +7,19 @@ const request = require('supertest')
 const agent = request.agent(server);
 
 chai.use(chaiHttp);
-const expect  = chai.expect;
+const expect = chai.expect;
 
 const resolvingPromise = new Promise((resolve) =>
   resolve('promise resolved')
 );
-const rejectingPromise = new Promise((resolve, reject) =>
-  reject(new Error('promise rejected'))
-);
+
 // first check mocha
 const assert = require('assert');
 describe('Array', () => {
   describe('#indexOf()', () => {
 
     it('should return -1 when the value is not present', () => {
-      assert.equal([1,2,3].indexOf(4), -1);
+      assert.equal([1, 2, 3].indexOf(4), -1);
     });
   });
 });
@@ -31,29 +29,141 @@ describe('App basics', () => {
   it('Should exists', () => {
     expect(app).to.be.a('function');
   })
-})  
+})
 
 describe('Login Sessions', () => {
-    it('assertion success', async () => {
-      const result = await resolvingPromise;
-      expect(result).to.equal('promise resolved');
-    });
-    it('should signin non-admin user successfully', (done) => {
-      chai
-          .request(app)
-          .post('/api/auth/signin')
-          .send({
-            "email": "mayojames@gmail.com",
-            "password": "mayo"
-          })
-          .end((err, res) => {
-              expect(res.status).to.be.equal(200);
-              expect(res.body.status).to.equal('success');
-              expect(res.body).to.have.property('status');
-              expect(res.body).to.have.property('data');
-              done();
-          });
+  it('assertion success', async () => {
+    const result = await resolvingPromise;
+    expect(result).to.equal('promise resolved');
   });
+
+  it('should sign in Admin successfully', (done) => {
+    chai
+      .request(app)
+      .post('/api/auth/signin')
+      .send({
+        "email": "jamesd2.dean@example.com", "password": "jamesdean2"
+      })
+      .end((err, res) => {
+        expect(res.status).to.be.equal(200);
+        expect(res.body.status).to.equal('success');
+        expect(res.body).to.have.property('data');
+        done();
+        
+       // console.log('token1: ', res.body.token)
+      });
+  });
+  it('should signin non-Admin employees successfully', (done) => {
+    chai
+      .request(app)
+      .post('/api/auth/signin')
+      .send({
+        "email": "mayojames@gmail.com", "password": "mayo"
+      })
+      .end((err, res) => {
+        expect(res.status).to.be.equal(200);
+        expect(res.body.status).to.equal('success');
+        expect(res.body).to.have.property('data');
+        done();
+      });
+  });
+
+  it('should return error 401 for invalid password ', (done) => {
+    chai
+      .request(app)
+      .post('/api/auth/signin')
+      .send({
+        "email": "mayojames@gmail.com", "password": "mayo4"
+      })
+      .end((err, res) => {
+        expect(res.status).to.be.equal(401);
+        done();
+      });
+  });
+
+  it('should return error 400 for invalid email ', (done) => {
+    chai
+      .request(app)
+      .post('/api/auth/signin')
+      .send({ "email": "mayojamesE@gmail.com", "password": "mayo"
+      })
+      .end((err, res) => {
+        expect(res.status).to.be.equal(400);
+        done();
+      });
+  })
+
+  it('should return with a error 400, if authorization is not provided', (done) => {
+
+    const firstname = 'Mayo';
+    const lastname = 'James';
+    const email = 'mayojames@ymail.com';
+    const password = 'mayo';
+    const gender = 'male';
+    const jobrole = 'designer';
+    const department = 'UIX';
+    const address = '20 Alla Jer Str';
+    const createdon = "2014-04-02";
+
+    chai
+      .request(app)
+      .post('/api/auth/create-user')
+      .send({
+        firstname, lastname, email, password, gender, jobrole, department, address, createdon
+      })
+      .end((err, res) => {
+       expect(res.status).to.be.equal(401);
+       done();
+      })
+  });
+
+  
+  /**
+   *   it('Admin only should create an employee', (done) => {
+    //  Admin sign in to get session token
+    const AdminEmail = 'jamesdean2@example.com';
+    const AdminPassword = 'jamesdean2';
+    
+    chai.
+        request(app)
+        .post('/api/auth/signin')
+        .send({ AdminEmail: AdminEmail, AdminPassword: AdminPassword })
+        .end((err, res) => {
+         // expect(res.status).to.be.equal(401);
+          done();
+          //let token = res.body.token
+          console.log('token: ', res.body.token)
+         })    
+
+    // console.log('token: ', token)
+    // create new user properties and value
+    const firstname = 'Mayo2';
+    const lastname = 'James2';
+    const email = 'mayojames2@ymail.com';
+    const password = 'mayo2';
+    const gender = 'male';
+    const jobrole = 'designer';
+    const department = 'UIX';
+    const address = '20 Alla Jer Str';
+    const createdon = "2014-04-02";
+
+    console.log('token2: ', token)
+    // Send the request
+      chai  
+        .request(app)
+        .post('/api/v1/auth/create-user')
+        .set('Admin', token)
+        .send({
+          firstname, lastname, email, password, gender, jobrole, department, address, createdon
+        })
+        .end((err, res) => {
+         expect(res.status).to.be.equal(401);
+         done();
+        })
+    expect(res.status).to.equal(201);
+});
+   */
+
 
 });
 
