@@ -36,7 +36,7 @@ const getAllEmployees = async (request, response) => {
   response.status(200).send({status: 'success',message: 'All Employees data retrieved,successfully!',data: result.rows,
   });
  } 
- catch (error) {response.status(400).json({ error: error})
+ catch (error) {response.status(400).send({ error: error})
  }
  
 }
@@ -62,7 +62,7 @@ const signupEmployee = async (req, res) => {
     await client.end()
     res.status(200).send({status: 'success', message: `New employee Added! `, data: result.rows, });
    } 
-    catch (error) { res.status(400).json({error: error.detail })
+    catch (error) { res.status(400).send({error: error.detail })
    }
 };
 
@@ -77,24 +77,26 @@ const loginEmployee = async (request, response,done) => {
   client.query('SELECT * FROM employee WHERE email = $1', [email], (error, results) => {
   
     console.log('data: ', results.rows)
-    if (results.rows < 1) {
-      return response.status(400).json({ status: "failure", message: `Employee with e-mail:${email}, not found!`
+    if (results.rowCount < 1) {
+      return response.status(400).send({ status: "failure", message: `Employee with e-mail:${email}, not found!`
       })
     }
     
     bcrypt.compare(request.body.password, results.rows[0].password ).then(
       (valid) => {
         if (!valid) {
-          return response.status(401).json({ error: 'Incorrect passwords!', })
+          return response.status(401).send({ error: 'Incorrect passwords!', })
         }
 
-        response.status(200).json({
+        response.status(200).send({
           userId: results.rows[0].eid,token: security.tokenize_(results.rows[0].lastname),
           status: 'success', message: `Employee with email: ${email}, sign-in successfully!`, data: results.rows,
+        
         })
-      }).catch( (error) => { response.status(500).json({ error: error })
+      }).catch( (error) => { response.status(500).send({ error: error })
         }
       )
+      console.log(response.token)
 
   })
  // await client.end()
@@ -114,7 +116,7 @@ const updateEmployee = (request, response) => {
     (error, results) => {
 
       if (error) {
-        return response.status(400).json({ error: error.detail});
+        return response.status(400).send({ error: error.detail});
       }
       response.status(200).send({
         status: 'success',
@@ -153,7 +155,7 @@ module.exports = {
   updateEmployee,
   deleteEmployee,
   signupEmployee,
-  loginEmployee
-
+  loginEmployee,
+  security
 }
 
