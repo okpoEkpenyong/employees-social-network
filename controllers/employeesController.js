@@ -77,7 +77,7 @@ const loginEmployee = async (request, response,done) => {
   client.query('SELECT * FROM employee WHERE email = $1', [email], (error, results) => {
   
     console.log('data: ', results.rows)
-    if (results.rows < 1) {
+    if (results.rowCount < 1) {
       return response.status(400).send({ status: "failure", message: `Employee with e-mail:${email}, not found!`
       })
     }
