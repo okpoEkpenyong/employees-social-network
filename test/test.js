@@ -106,7 +106,7 @@ describe('Login Sessions', () => {
     const createdon = "2014-04-02";
 
     chai
-      .request(server)
+      .request(app)
       .post('/api/auth/create-user')
       .send({
         firstname, lastname, email, password, gender, jobrole, department, address, createdon
