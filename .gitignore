@@ -1,4 +1,4 @@
 node_modules
 .coveralls.yml
 .env
-.nyc_output
+.nyc_output\processinfo

@@ -1,13 +1,18 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const server = require('../server');
 const app = require('../app');
+const server = require('../server');
 const should = require('should');
 const request = require('supertest')
-const agent = request.agent(server);
+const agent = request.agent(app);
 
 chai.use(chaiHttp);
 const expect = chai.expect;
+
+const AdminParams = {
+  email: 'jamesd2.dean@example.com',
+  password: 'jamesdean2',
+};
 
 const resolvingPromise = new Promise((resolve) =>
   resolve('promise resolved')
@@ -25,7 +30,7 @@ describe('Array', () => {
 });
 
 // justify that our app  exists
-describe('App basics', () => {
+describe('app basics', () => {
   it('Should exists', () => {
     expect(app).to.be.a('function');
   })
@@ -37,11 +42,10 @@ describe('Login Sessions', () => {
     expect(result).to.equal('promise resolved');
   });
 
-
   it('should return error 500 for invalid password ', (done) => {
     chai
-      .request(server)
-      .post('/api/auth/signin')
+      .request(app)
+      .post('/api/v1/auth/signin')
       .send({
         "email": "mayojames@gmail.com", "password": "mayo4"
       })
@@ -53,9 +57,10 @@ describe('Login Sessions', () => {
 
   it('should return error 500 for invalid email ', (done) => {
     chai
-      .request(server)
-      .post('/api/auth/signin')
-      .send({ "email": "mayojamesE@gmail.com", "password": "mayo"
+      .request(app)
+      .post('/api/v1/auth/signin')
+      .send({
+        "email": "mayojamesE@gmail.com", "password": "mayo"
       })
       .end((err, res) => {
         expect(res.status).to.be.equal(500);
@@ -72,68 +77,52 @@ describe('Login Sessions', () => {
     const gender = 'male';
     const jobrole = 'designer';
     const department = 'UIX';
+
+
     const address = '20 Alla Jer Str';
     const createdon = "2014-04-02";
 
     chai
       .request(app)
-      .post('/api/auth/create-user')
+      .post('/api/v1/auth/create-user')
       .send({
         firstname, lastname, email, password, gender, jobrole, department, address, createdon
       })
       .end((err, res) => {
-       expect(res.status).to.be.equal(401);
-       done();
+        expect(res.status).to.be.equal(401);
+        done();
       })
   });
 
-  
-  /**
-   *   it('Admin only should create an employee', (done) => {
-    //  Admin sign in to get session token
-    const AdminEmail = 'jamesdean2@example.com';
-    const AdminPassword = 'jamesdean2';
-    
-    chai.
-        request(app)
-        .post('/api/auth/signin')
-        .send({ AdminEmail: AdminEmail, AdminPassword: AdminPassword })
-        .end((err, res) => {
-         // expect(res.status).to.be.equal(401);
-          done();
-          //let token = res.body.token
-          console.log('token: ', res.body.token)
-         })    
-
-    // console.log('token: ', token)
-    // create new user properties and value
-    const firstname = 'Mayo2';
-    const lastname = 'James2';
-    const email = 'mayojames2@ymail.com';
-    const password = 'mayo2';
-    const gender = 'male';
-    const jobrole = 'designer';
-    const department = 'UIX';
-    const address = '20 Alla Jer Str';
-    const createdon = "2014-04-02";
-
-    console.log('token2: ', token)
-    // Send the request
-      chai  
-        .request(app)
-        .post('/api/v1/auth/create-user')
-        .set('Admin', token)
-        .send({
-          firstname, lastname, email, password, gender, jobrole, department, address, createdon
-        })
-        .end((err, res) => {
-         expect(res.status).to.be.equal(401);
-         done();
-        })
-    expect(res.status).to.equal(201);
-});
-   */
-
-
 });
 
+describe("Signup Sessions", () => {
+
+  it('should return error 401 if employee exists', (done) => {
+    chai.request(app)
+      .post('/api/v1/auth/signin')
+      .send({ email: AdminParams.email, password: AdminParams.password })
+      .end((err, res) => {
+        should.not.exist(err);  ///api/v1/auth/create-user
+    chai.request(app)
+      .post('/api/v1/auth/create-user')
+      .set("Authorization", `Bearer ${res.body.token}`)
+      .send({
+        firstname: 'Mayo2',
+        lastname: 'James2',
+        email: 'mayojames2@gmail.com',
+        password: 'mayo2',
+        gender: 'male',
+        jobrole: 'designer',
+        department: 'UIX',
+        address: '20 Alla Jer Str',
+        createdon:  '2014-04-02'
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(401); // employee exists
+        done();
+      });
+    });
+  });
+
+})
