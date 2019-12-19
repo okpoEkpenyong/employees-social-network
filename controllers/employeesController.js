@@ -58,11 +58,10 @@ const signupEmployee = async (req, res) => {
       text: 'INSERT INTO employee(firstname, lastname, email, password,gender,jobrole, department, address, createdon) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *', 
       values:  [firstname, lastname, email, hash, gender, jobrole, department, address, createdon],
     })
-    console.log('data:' , result.rows)
     await client.end()
-    res.status(200).send({status: 'success', message: `New employee Added! `, data: result.rows, });
+    res.status(201).send({status: 'success',message: `New employee Added! `, data: result.rows, });
    } 
-    catch (error) { res.status(400).send({error: error.detail })
+    catch (error) { res.status(500).send({error: error.detail })
    }
 };
 
@@ -74,32 +73,27 @@ const loginEmployee = async (request, response,done) => {
   const email =  request.body.email
   const client = await pool.connect()
   
+try {
+  
   client.query('SELECT * FROM employee WHERE email = $1', [email], (error, results) => {
   
-    console.log('data: ', results.rows)
     if (results.rowCount < 1) {
-      return response.status(400).send({ status: "failure", message: `Employee with e-mail:${email}, not found!`
-      })
-    }
-    
-    bcrypt.compare(request.body.password, results.rows[0].password ).then(
-      (valid) => {
-        if (!valid) {
-          return response.status(401).send({ error: 'Incorrect passwords!', })
-        }
+      return response.status(401).send({ status: "failure", message: `Employee with e-mail:${email}, not found!`})}
+     
+     bcrypt.compare(request.body.password, results.rows[0].password ).then(
+       (valid) => {
+         if (!valid) {
+           return response.status(401).send({ error: 'Incorrect passwords!', })}
+ 
+         response.status(200).send({
+           userId: results.rows[0].eid,token: security.tokenize_(results.rows[0].lastname),
+           status: 'success', message: `Employee with email: ${email}, sign-in successfully!`, data: results.rows,    
+         })
+       }).catch( (error) => { response.status(500).send({ error: error })}
+       )
+   })
+} catch (error) {response.status(500).send({ error: error })}
 
-        response.status(200).send({
-          userId: results.rows[0].eid,token: security.tokenize_(results.rows[0].lastname),
-          status: 'success', message: `Employee with email: ${email}, sign-in successfully!`, data: results.rows,
-        
-        })
-      }).catch( (error) => { response.status(500).send({ error: error })
-        }
-      )
-      console.log(response.token)
-
-  })
- // await client.end()
 };
 
 /**

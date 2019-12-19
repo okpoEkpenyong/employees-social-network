@@ -9,8 +9,8 @@ router.get('/api/v1/employee', auth, database.getAllEmployees)   //GET all emplo
 router.put('/api/v1/employee/:eid', auth, database.updateEmployee)  // UPDATE an employee info
 router.delete('/api/v1/employee/:eid', auth, database.deleteEmployee) // DELETE an employee info
 
-router.post('/api/auth/signin', database.loginEmployee);     // POST or signin: Admin/employee
-router.post('/api/auth/create-user', auth, database.signupEmployee)   // POST or create a new employee/signup(Admin only)
+router.post('/api/v1/auth/signin', database.loginEmployee);     // POST or signin: Admin/employee
+router.post('/api/v1/auth/create-user', auth, database.signupEmployee)   // POST or create a new employee/signup(Admin only)
 
 // post route
 
