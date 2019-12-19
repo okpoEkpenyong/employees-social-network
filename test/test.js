@@ -97,42 +97,8 @@ describe('Login Sessions', () => {
 });
 
 describe("Signup Sessions", () => {
-  it('should return a success for Admin login ', (done) => {
-    chai.request(app)
-      .post('/api/v1/auth/signin')
-      .send({ email: AdminParams.email, password: AdminParams.password })
-      .end((err, res) => {
-        should.not.exist(err);
-        res.status.should.eql(200);
-        res.body.status.should.eql('success');
-        should.exist(res.body.token); //admin
-        done();
 
-        console.log('response: ', res.body.token)
-      })
-
-  }),
-    it('should access all employee details if Admin signs in', (done) => {
-      chai.request(app)
-        .post('/api/v1/auth/signin')
-        .send({ email: AdminParams.email, password: AdminParams.password })
-        .end((error, response) => {
-          should.not.exist(error);
-          chai.request(app)
-          .get('/api/v1/employee')
-          .set('Authorization', `Bearer ${response.body.token}`) 
-            .end((err, res) => {
-              should.not.exist(err);
-              res.status.should.eql(200);
-              res.type.should.eql('application/json');
-              res.body.status.should.eql('success');
-              expect(response.body.data).to.be.an("array");
-              done();
-            });
-        });
-    });
-
-  it('should return error 500 if employee exists', (done) => {
+  it('should return error 401 if employee exists', (done) => {
     chai.request(app)
       .post('/api/v1/auth/signin')
       .send({ email: AdminParams.email, password: AdminParams.password })
@@ -153,7 +119,7 @@ describe("Signup Sessions", () => {
         createdon:  '2014-04-02'
       })
       .end((err, res) => {
-        expect(res).to.have.status(500); // employee exists
+        expect(res).to.have.status(401); // employee exists
         done();
       });
     });
